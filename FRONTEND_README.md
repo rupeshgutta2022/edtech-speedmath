@@ -18,7 +18,7 @@ The UI consumes `GAME_DURATION_SECONDS`, `MAX_SCORE_PER_GAME`, and `MIN_SECONDS_
 
 ## Run
 npm install
-cp .env.example .env
+cp example.env .env
 npm run migrate
 npm run dev
 

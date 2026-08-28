@@ -15,7 +15,7 @@ server-side score validation, and a static frontend that talks to it.
 
 ```bash
 npm install
-cp .env.example .env
+cp example.env .env
 # edit .env — set DATABASE_URL, JWT_SECRET, JWT_REFRESH_SECRET at minimum
 
 npm run migrate     # creates tables/views in your Postgres database
