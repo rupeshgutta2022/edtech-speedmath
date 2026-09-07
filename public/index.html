@@ -1,14 +1,230 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>SpeedMath Pro</title><link rel="stylesheet" href="/styles.css"></head><body>
-<div id="toast"></div>
-<header class="topbar"><a class="brand" href="#home">⚡ <span>SpeedMath</span><b>PRO</b></a><nav><button data-view="home">Home</button><button data-view="play">Play</button><button data-view="leaderboard">Leaderboard</button><button data-view="profile">Profile</button></nav><div class="nav-actions"><button id="themeBtn" title="Theme">◐</button><button id="authBtn" class="primary">Login</button></div></header>
-<main>
-<section id="home" class="view active"><div class="hero"><div><p class="eyebrow">REAL-TIME ARITHMETIC CHALLENGE</p><h1>Think fast.<br><em>Score faster.</em></h1><p class="lead">A competitive speed-math experience connected directly to your secure leaderboard API.</p><div class="hero-actions"><button class="primary big" data-view="play">Start Playing →</button><button class="ghost big" data-view="leaderboard">View Rankings</button></div><div class="metrics"><div><strong id="cfgDuration">30</strong><span>Second rounds</span></div><div><strong id="cfgMaxScore">60</strong><span>Max validated score</span></div><div><strong>JWT</strong><span>Secure accounts</span></div></div></div><div class="hero-card"><div class="mini-head"><span>LIVE CHALLENGE</span><span class="pulse">● ONLINE</span></div><div class="mini-question">27 × 3</div><div class="mini-answer">81 <span>✓</span></div><div class="mini-stats"><div><b>12</b><small>STREAK</small></div><div><b>1,240</b><small>XP</small></div><div><b>94%</b><small>ACCURACY</small></div></div></div></div>
-<div class="section-title"><div><p class="eyebrow">YOUR API, YOUR GAME</p><h2>Everything connected</h2></div><span id="healthBadge" class="status">Checking API…</span></div><div class="cards"><article><span>01</span><h3>Secure Auth</h3><p>Signup, login, refresh-cookie sessions and protected logout.</p></article><article><span>02</span><h3>Validated Scores</h3><p>Duration, maximum score and submission limits match your backend.</p></article><article><span>03</span><h3>Live Rankings</h3><p>Daily, weekly and all-time leaderboard data comes from PostgreSQL.</p></article></div></section>
-<section id="play" class="view"><div class="game-layout"><aside class="game-panel settings"><p class="eyebrow">GAME SETTINGS</p><h2>Challenge setup</h2><label>Operation<select id="operation"><option value="mixed">Mixed</option><option value="add">Addition</option><option value="sub">Subtraction</option><option value="mul">Multiplication</option><option value="div">Division</option></select></label><label>Difficulty<select id="difficulty"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option><option value="expert">Expert</option></select></label><label>Round duration<input id="duration" type="number" min="5" max="3600"></label><p class="hint">The backend validates submitted duration from 1–3600 seconds. Server anti-cheat limits still apply.</p><button id="startGame" class="primary full">Start Round</button></aside>
-<section class="game-panel arena"><div class="arena-top"><div><span>TIME</span><b id="timer">00:00</b></div><div><span>SCORE</span><b id="liveScore">0</b></div><div><span>STREAK</span><b id="streak">0</b></div></div><div id="progress"><i></i></div><div class="question-wrap"><p id="questionLabel">Ready when you are</p><div id="question">—</div><form id="answerForm"><input id="answer" inputmode="numeric" autocomplete="off" placeholder="Type answer" disabled><button class="primary" disabled>Submit</button></form><p id="feedback"></p></div></section>
-<aside class="game-panel live-side"><p class="eyebrow">ROUND STATUS</p><div class="score-orb"><b id="orbScore">0</b><span>POINTS</span></div><div class="mini-row"><span>Personal best</span><b id="personalBest">—</b></div><div class="mini-row"><span>API max score</span><b id="sideMaxScore">60</b></div><div class="mini-row"><span>Min submit gap</span><b id="minGap">—</b></div></aside></div></section>
-<section id="leaderboard" class="view"><div class="section-title"><div><p class="eyebrow">GLOBAL RANKINGS</p><h1>Leaderboard</h1></div><button id="refreshBoard" class="ghost">↻ Refresh</button></div><div class="tabs"><button data-period="daily">Today</button><button data-period="weekly">This week</button><button data-period="alltime" class="selected">All time</button></div><div class="table-card"><div class="table-head"><span>#</span><span>PLAYER</span><span>SCORE</span><span>PLAYED</span></div><div id="leaderboardRows" class="table-body"><p class="empty">Loading rankings…</p></div></div></section>
-<section id="profile" class="view"><div id="profileGuest" class="empty-card"><h2>Your player profile</h2><p>Login to see your account, best score, average score and recent history.</p><button id="profileLogin" class="primary">Login</button></div><div id="profileAuthed" hidden><div class="profile-hero"><div class="avatar" id="avatar">S</div><div><p class="eyebrow">PLAYER PROFILE</p><h1 id="profileName">—</h1><p id="profileEmail">—</p></div><button id="logoutBtn" class="ghost">Logout</button></div><div class="stats-grid"><div><span>Games played</span><b id="gamesPlayed">0</b></div><div><span>Best score</span><b id="bestScore">0</b></div><div><span>Average score</span><b id="avgScore">0</b></div></div><div class="history-card"><h3>Recent games</h3><div id="history"></div></div></div></section>
-</main>
-<div id="authModal" class="modal" hidden><div class="modal-card"><button class="close" id="closeModal">×</button><p class="eyebrow">ACCOUNT ACCESS</p><h2 id="authTitle">Welcome back</h2><form id="authForm"><div id="emailWrap" hidden><label>Email<input id="email" type="email" placeholder="you@example.com"></label></div><label>Username<input id="username" minlength="3" maxlength="32" placeholder="your_username" required></label><label>Password<input id="password" type="password" minlength="8" placeholder="••••••••" required></label><p id="authError"></p><button class="primary full" type="submit">Login</button></form><button id="toggleAuth" class="text-btn">Need an account? Sign up</button></div></div>
-</body><script src="/app.js"></script></html>
+<!DOCTYPE html>
+<html lang="en" data-math-theme="math-daylight">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SpeedMath Pro — Arithmetic Challenge & Competitive Leaderboards</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <!-- ================= AUTHENTICATION & PORTAL GATE ================= -->
+  <div id="authScreen" class="auth-container">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <h1>SpeedMath Pro</h1>
+        <p>Real-Time Arithmetic & Ranked Leaderboards</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button onclick="setAuthTab('login')" id="tab-login" class="auth-tab-btn active">Sign In</button>
+        <button onclick="setAuthTab('signup')" id="tab-signup" class="auth-tab-btn">Create Account</button>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="loginForm" onsubmit="event.preventDefault(); handleMathLogin();">
+        <div class="form-group">
+          <label>Player Username / Email</label>
+          <input id="loginUsername" type="text" required value="rupesh_gutta" class="form-control" placeholder="username or email">
+        </div>
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label>Password</label>
+            <a href="#" onclick="event.preventDefault(); openForgotModal();" style="font-size:11px; color:var(--primary); text-decoration:none;">Forgot?</a>
+          </div>
+          <div class="pw-input-wrapper">
+            <input id="loginPassword" type="password" required value="MathMaster2026!" class="form-control" placeholder="••••••••" onkeyup="checkMathCapsLock(event, 'loginMathCapsWarning')" onkeydown="checkMathCapsLock(event, 'loginMathCapsWarning')">
+            <button type="button" class="pw-toggle-btn" onclick="toggleMathPasswordVisibility('loginPassword', this)">Show</button>
+          </div>
+          <div id="loginMathCapsWarning" class="caps-warning">Caps Lock is ON</div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:10px; margin-top:6px; font-weight:600;">Sign In & Play</button>
+      </form>
+
+      <!-- Sign Up Form -->
+      <form id="signupForm" class="hidden" onsubmit="event.preventDefault(); handleMathSignUp();">
+        <div class="form-group">
+          <label>Player Username</label>
+          <input id="suUsername" type="text" required class="form-control" placeholder="e.g. math_wizard">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input id="suEmail" type="email" required class="form-control" placeholder="player@domain.com">
+        </div>
+        <div class="form-group">
+          <label>Create Account Password</label>
+          <div class="pw-input-wrapper">
+            <input id="suPassword" type="password" required class="form-control" placeholder="At least 8 characters" oninput="validateMathPasswordStrength(this.value)" onkeyup="checkMathCapsLock(event, 'suMathCapsWarning')">
+            <button type="button" class="pw-toggle-btn" onclick="toggleMathPasswordVisibility('suPassword', this)">Show</button>
+          </div>
+          <div id="suMathCapsWarning" class="caps-warning">Caps Lock is ON</div>
+          <div class="pw-strength-bar">
+            <div id="mathPwStrengthFill" class="pw-strength-fill"></div>
+          </div>
+          <div class="pw-criteria">
+            <span id="math-crit-len">Minimum 8 characters</span>
+            <span id="math-crit-num">Contains at least 1 number</span>
+            <span id="math-crit-upper">Contains at least 1 uppercase letter</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <div class="pw-input-wrapper">
+            <input id="suConfirmPassword" type="password" required class="form-control" placeholder="Re-enter password" oninput="checkMathPasswordMatch()">
+            <button type="button" class="pw-toggle-btn" onclick="toggleMathPasswordVisibility('suConfirmPassword', this)">Show</button>
+          </div>
+          <div id="mathPwMatchText" class="pw-match-text"></div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:10px; margin-top:6px; font-weight:600;">Create Account & Enter Arena</button>
+      </form>
+
+      <!-- Quick 1-Click Demo Profiles -->
+      <div class="quick-logins">
+        <div class="quick-logins-title">Quick 1-Click Demo Profiles</div>
+        <button onclick="quickMathLogin('Rupesh Gutta', 'rupesh_gutta', 'Speed Grandmaster', 54)" class="quick-login-btn">
+          <span><b>Rupesh Gutta</b> · Speed Grandmaster (54 Best)</span>
+          <span>Open</span>
+        </button>
+        <button onclick="quickMathLogin('Sarah Jenkins', 'sarah_jenkins', 'Competitive Math Lead', 48)" class="quick-login-btn">
+          <span><b>Sarah Jenkins</b> · Competitive Math Lead (48 Best)</span>
+          <span>Open</span>
+        </button>
+        <button onclick="quickMathLogin('David Kim', 'david_kim', 'MathOps Champion', 58)" class="quick-login-btn">
+          <span><b>David Kim</b> · MathOps Champion (58 Best)</span>
+          <span>Open</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN APP LAYOUT ================= -->
+  <div id="appLayout" class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>SpeedMath Pro</h1>
+        <p>Real-Time Arithmetic Arena</p>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-label">Competition</div>
+        <button onclick="loadPage('arena')" class="nav-item active" id="nav-arena">
+          <span style="display:flex; align-items:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            Play Challenge Arena
+          </span>
+          <span class="badge">Live</span>
+        </button>
+        <button onclick="loadPage('leaderboard')" class="nav-item" id="nav-leaderboard">
+          <span style="display:flex; align-items:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34c3-.97 5-3.66 5-6.66V4H6v4c0 3 2 5.69 5 6.66Z"/></svg>
+            Global Leaderboard
+          </span>
+          <span class="badge">Ranked</span>
+        </button>
+        <button onclick="loadPage('profile')" class="nav-item" id="nav-profile">
+          <span style="display:flex; align-items:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Player Profile & Stats
+          </span>
+        </button>
+
+        <div class="nav-section-label" style="margin-top: 10px;">Training & Tools</div>
+        <button onclick="loadPage('reference')" class="nav-item" id="nav-reference">
+          <span style="display:flex; align-items:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Formula & Shortcuts
+          </span>
+        </button>
+        <button onclick="loadPage('settings')" class="nav-item" id="nav-settings">
+          <span style="display:flex; align-items:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Arena Settings
+          </span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-pill" style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div id="currentUserAvatar" class="user-avatar">RG</div>
+            <div class="user-meta">
+              <b id="currentUserName">Rupesh Gutta</b>
+              <small id="currentUserRole">Speed Grandmaster</small>
+            </div>
+          </div>
+          <button onclick="logoutMath()" class="btn btn-outline btn-sm" title="Sign Out" style="padding:2px 6px; font-size:11px;">Logout</button>
+        </div>
+
+        <div class="theme-dropdown-wrap">
+          <label>Theme Modulation</label>
+          <select id="paletteSelect" onchange="changeMathTheme(this.value)" class="theme-dropdown">
+            <option value="math-daylight">Warm Daylight (Ivory and Terracotta)</option>
+            <option value="math-studio">Neutral Studio (Slate and Oxford Navy)</option>
+            <option value="math-night">Low-Light Dark (Matte Charcoal and Amber)</option>
+          </select>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumbs">
+          Arena / <b id="pageBreadcrumb">Play Challenge Arena</b>
+        </div>
+
+        <div class="topbar-actions">
+          <button onclick="exportMathCSV()" class="btn btn-outline btn-sm">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            Export History CSV
+          </button>
+        </div>
+      </header>
+
+      <section id="content" class="content-body"></section>
+    </main>
+  </div>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Round Summary Modal -->
+  <div id="roundSummaryModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Round Completed</h3>
+        <button onclick="closeModal('roundSummaryModal')" class="modal-close">✕</button>
+      </div>
+      <div id="roundSummaryContent" style="text-align:center; padding:10px 0;"></div>
+      <div class="modal-footer">
+        <button onclick="closeModal('roundSummaryModal')" class="btn btn-outline btn-sm">Close</button>
+        <button onclick="closeModal('roundSummaryModal'); startMathRound();" class="btn btn-primary btn-sm">Play Another Round</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgotPasswordModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Reset Password</h3>
+        <button onclick="closeModal('forgotPasswordModal')" class="modal-close">✕</button>
+      </div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Enter your email to receive password reset instructions.</p>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input id="fpEmail" type="email" placeholder="name@domain.com" class="form-control">
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('forgotPasswordModal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="sendPasswordResetLink()" class="btn btn-primary btn-sm">Send Reset Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

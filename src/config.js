@@ -1,4 +1,6 @@
-require('dotenv').config();
+try {
+  require('dotenv').config();
+} catch (e) {}
 
 function num(name, fallback) {
   const v = process.env[name];
@@ -13,8 +15,8 @@ function bool(name, fallback) {
 
 const config = {
   env: process.env.NODE_ENV || 'development',
-  port: num('PORT', 3000),
-  clientOrigin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
+  port: num('PORT', 3050),
+  clientOrigin: process.env.CLIENT_ORIGIN || 'http://localhost:3050',
 
   db: {
     url: process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/speed_math',
